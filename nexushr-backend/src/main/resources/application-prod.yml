@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DATABASE_URL:${SPRING_DATASOURCE_URL:}}
+    username: ${DB_USERNAME:${SPRING_DATASOURCE_USERNAME:}}
+    password: ${DB_PASSWORD:${SPRING_DATASOURCE_PASSWORD:}}
     hikari:
       maximum-pool-size: 20
       minimum-idle: 5
@@ -12,10 +12,10 @@ spring:
   jpa:
     show-sql: false
   mail:
-    host: ${SMTP_HOST}
+    host: ${SMTP_HOST:smtp.example.com}
     port: ${SMTP_PORT:587}
-    username: ${SMTP_USERNAME}
-    password: ${SMTP_PASSWORD}
+    username: ${SMTP_USERNAME:dummy}
+    password: ${SMTP_PASSWORD:dummy}
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
