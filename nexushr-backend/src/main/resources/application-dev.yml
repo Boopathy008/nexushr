@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nexushr
+    username: postgres
+    password: postgres123
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    show-sql: true
+  mail:
+    host: localhost
+    port: 1025        # MailHog for local dev
+
+logging:
+  level:
+    com.nexushr: DEBUG
+    org.springframework.security: DEBUG

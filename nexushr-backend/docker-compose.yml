@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: nexushr-postgres
+    environment:
+      POSTGRES_DB:       nexushr_dev
+      POSTGRES_USER:     nexushr
+      POSTGRES_PASSWORD: nexushr123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexushr -d nexushr_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: nexushr-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  backend:
+    build: .
+    container_name: nexushr-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_USERNAME:  nexushr
+      DB_PASSWORD:  nexushr123
+      JWT_SECRET:   "dGhpcyBpcyBhIHZlcnkgbG9uZyBzZWNyZXQga2V5IGZvciBuZXh1c2hyMjAyNA=="
+      CORS_ALLOWED_ORIGINS: "http://localhost:5173"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  postgres_data:
